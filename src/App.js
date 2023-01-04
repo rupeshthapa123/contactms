@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Form from "./components/Form";
 import Swal from 'sweetalert2';
 import { ToastContainer, toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -40,17 +41,33 @@ class App extends React.Component {
     })
   };
   handleSubmittedData = (formData) => {
-    let id = this.state.contact.length + 1;
-    let insertData = { id, ...formData };
+    // let id = this.state.contact.length + 1;
+    let insertData = { id: uuidv4(), ...formData };
     this.setState({ contact: [insertData, ...this.state.contact] })
     toast.success("Data inserted");
+  };
+  handleEditData = (editData) => {
+    let editContact = this.state.contact.map(function (contact) {
+      if (editData.id === contact.id) {
+        return editData;
+      }
+      return contact;
+    })
+    this.setState({ contact: editContact });
+    toast.success("Edit Successfully");
   };
   render() {
     return (
       <div>
         <Navbar title="Contact Management System" />
         <Form formData={this.handleSubmittedData} />
-        {this.state.contact.map((contact) => <Contact contact={contact} delete={this.handledelete} key={contact.id} />)}
+        {this.state.contact.map(contact => (
+          <Contact
+            contact={contact}
+            delete={this.handledelete}
+            edit={this.handleEditData}
+            key={contact.id}
+          />))}
         <ToastContainer />
       </div>
     );
