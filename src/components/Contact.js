@@ -16,7 +16,7 @@ class Contact extends React.Component {
         this.setState({ isShowing: !this.state.isShowing })
     }
     handleDelete = () => {
-        this.props.delete(this.props.contact.id);
+        this.props.delete(this.props.contact._id);
     }
     handleEditing = () => {
         this.setState({ isEditing: true });
@@ -38,11 +38,14 @@ class Contact extends React.Component {
             name,
             email,
             phone,
-            id: this.props.contact.id
+            id: this.props.contact._id
         };
         this.props.edit(editedData);
         this.setState({ error: {}, isEditing: false });
     }
+    // componentWillUnmount() {
+    //     console.log("ComponentWillUnmount called")
+    // }
     render() {
         let cls = this.state.isShowing
             ? "fas fa-sort-up mr-3"
